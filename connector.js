@@ -65,6 +65,9 @@ formEl.onsubmit = async event => {
   document.querySelector('#formulario').hidden = true; document.querySelector('#success').hidden = false; results();
 };
 
-document.querySelector('#editButton').onclick = () => document.querySelector('#adminLogin').hidden = false;
-document.querySelector('#closeLogin').onclick = () => document.querySelector('#adminLogin').hidden = true;
+document.querySelector('#editButton').onclick = () => {
+  document.querySelector('#editor').classList.add('open');
+  document.querySelector('#editor').setAttribute('aria-hidden', 'false');
+  edit(); results();
+};
 document.querySelector('#restart').addEventListener('click', updateProgress); updateProgress();
