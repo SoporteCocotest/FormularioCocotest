@@ -1,4 +1,4 @@
-const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwRpSVwcas3hrJaUonWjfaCDPiogyd6ICERJGpgvoMyeHtir3y3oq9hX2J_vgVbNUeu/exec';
+const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbypBnJrxDlo8_g_Zj-gCTQqfRISBFWbvwR7JEX9BHOH5Lzr3xAVjmpPSgDg80mMxnY3ZQ/exec';
 const formEl = document.querySelector('#surveyForm');
 
 function postToSheet(payload) {
