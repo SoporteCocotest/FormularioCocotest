@@ -1,6 +1,21 @@
 const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwRpSVwcas3hrJaUonWjfaCDPiogyd6ICERJGpgvoMyeHtir3y3oq9hX2J_vgVbNUeu/exec';
 const formEl = document.querySelector('#surveyForm');
 
+function postToSheet(payload) {
+  let frame = document.querySelector('#sheets-submit-frame');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'sheets-submit-frame'; frame.name = 'sheets-submit-frame'; frame.hidden = true;
+    document.body.appendChild(frame);
+  }
+  const postForm = document.createElement('form');
+  postForm.method = 'POST'; postForm.action = SHEETS_ENDPOINT; postForm.target = frame.name;
+  postForm.hidden = true;
+  const field = document.createElement('input');
+  field.name = 'payload'; field.value = JSON.stringify(payload);
+  postForm.appendChild(field); document.body.appendChild(postForm); postForm.submit(); postForm.remove();
+}
+
 function valueFor(question) {
   if (question.type === 'text' || question.type === 'textarea') return formEl.elements[question.id]?.value.trim() || '';
   if (question.type === 'single') return formEl.querySelector(`input[name="${question.id}"]:checked`)?.value || '';
@@ -59,8 +74,7 @@ formEl.onsubmit = async event => {
   event.preventDefault(); if (!validate()) return;
   const payload = { submittedAt: new Date().toISOString(), answers: readableAnswers() };
   const button = formEl.querySelector('.form-submit'); button.disabled = true; button.textContent = 'Enviando…';
-  try { await fetch(SHEETS_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }); }
-  catch (error) { console.warn('No se ha podido confirmar el envío remoto.', error); }
+  postToSheet(payload);
   answers.push({ date: payload.submittedAt, answers: payload.answers }); localStorage.setItem('coco_responses', JSON.stringify(answers));
   document.querySelector('#formulario').hidden = true; document.querySelector('#success').hidden = false; results();
 };
